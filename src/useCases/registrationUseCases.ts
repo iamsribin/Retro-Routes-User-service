@@ -16,7 +16,7 @@ const userRepo=new userRepository()
 export default class registartionUseCase{
     user_registration=async (userData:userData)=>{
         try {
-            const {name,email,mobile,password,reffered_Code,userImage}=userData
+            const {name,email,mobile,password,userImage}=userData
             const refferal_code=refferalCode()
             const hashedPassword=await bcrypt.securePassword(password)
             const newUserData={
