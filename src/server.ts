@@ -2,10 +2,14 @@ import path from 'path';
 import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';
 import "dotenv/config";
+import connectDB from "./config/mongo";
+connectDB(); 
 
 import registrationControl from './controller/registrationController';
+import loginControl from './controller/loginController';
 
 const registrationController= new registrationControl() 
+const loginController= new loginControl() 
 
 const packageDef = protoLoader.loadSync(path.resolve(__dirname, './proto/user.proto'), {
   keepCase: true,
@@ -27,7 +31,11 @@ if (!userProto || !userProto.User || !userProto.User.service) {
 const server = new grpc.Server();
 
 server.addService(userProto.User.service, {
-  Register: registrationController.signup
+  Register: registrationController.signup,
+  CheckUser: registrationController.checkUser,
+  // ResendOtp: registrationController.resendOtp,
+  // CheckGoogleLoginUser: loginController.checkGoogleLoginUser,
+  CheckLoginUser: loginController.checkLoginUser,
 })
 
 

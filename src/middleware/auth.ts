@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from "express";
 import { ObjectId } from "mongodb";
 import { verify } from "crypto";
 import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config();
 
 interface DecodedToken {
   id: string;
@@ -19,7 +21,7 @@ export default {
       const token = jwt.sign({ clientId }, jwtSecretKey, { expiresIn: expire as SignOptions["expiresIn"]  });
       return token;
     } catch (error) {
-      console.log(error);
+      console.log("createToken===",error);
       return "something went wrong";
     }
   },

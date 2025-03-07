@@ -42,6 +42,8 @@ export default class registartionUseCase{
     checkUser=async (mobile:number,email:string)=>{
         try {
             const user=await userRepo.checkUser(mobile,email)
+            console.log("user===", user);
+            
         if(user)
             {
                 return {message:"user already have an account !"}

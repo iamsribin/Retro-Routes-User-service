@@ -1,6 +1,7 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema, ObjectId } from "mongoose";
 
 export interface UserInterface extends Document {
+    _id: ObjectId;
     name: string;
     email: string;
     mobile: number;
@@ -23,7 +24,6 @@ export interface UserInterface extends Document {
         cancelledRides: number;
     };
 }
-
 
 const UserSchema: Schema = new Schema({
     name: {

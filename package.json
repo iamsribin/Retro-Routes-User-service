@@ -47,6 +47,6 @@
     "nodemon": "^3.1.9",
     "sass": "^1.85.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.0-dev.20250214"
   }
 }

@@ -111,8 +111,8 @@
 // }
 {
   "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
     "target": "ESNext",
     "esModuleInterop": true,
     "strict": true

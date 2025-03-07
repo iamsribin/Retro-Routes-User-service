@@ -9,10 +9,10 @@ export const sendOtp=async(email:string,name:string)=>{
         const subject = "Otp Verification";
         const text = `Hello ${name},\n\nThank you for registering with Retro-Routes!, your OTP is ${otp}\n\nHave a nice day!!!`;
         await sendMail(email, subject, text);
-        console.log(otp,token,"sfjhagfjhsg");
+        console.log("otp, token",otp,token);
         return token
     } catch (error) {
-        console.log(error);
+        console.log("sendOtp fun",error);
         
     }
 }
