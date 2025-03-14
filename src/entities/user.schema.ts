@@ -1,31 +1,7 @@
-import mongoose, { Document, Schema, ObjectId } from "mongoose";
+import { Schema } from "mongoose";
+import { UserInterface } from "./user.interface";
 
-export interface UserInterface extends Document {
-    _id: ObjectId;
-    name: string;
-    email: string;
-    mobile: number;
-    password: string;
-    userImage: string;
-    referral_code: string;
-    account_status: string;
-    joiningDate: string;
-    wallet: {
-        balance: number;
-        transactions: {
-            date: Date;
-            details: string;
-            amount: number;
-            status: string;
-        }[];
-    };
-    RideDetails: {
-        completedRides: number;
-        cancelledRides: number;
-    };
-}
-
-const UserSchema: Schema = new Schema({
+const UserSchema: Schema = new Schema <UserInterface>({
     name: {
         type: String,
         required: true,
@@ -90,6 +66,5 @@ const UserSchema: Schema = new Schema({
         },
     },
 });
-const userModel=mongoose.model<UserInterface>("User", UserSchema);
 
-export default  userModel
+export default UserSchema;

@@ -1,27 +1,5 @@
-import User from "../entities/user";
-import { ObjectId } from "mongodb";
-
-interface registration {
-  name: string;
-  email: string;
-  mobile: number;
-  password: string;
-  referral_code: string;
-  userImage: any;
-}
-
-interface updateData {
-  name?: string | undefined;
-  email?: string | undefined;
-  mobile?: number | undefined;
-}
-
-interface ridePayment {
-  userId: string;
-  paymentMode: string;
-  amount: number;
-  rideId: string;
-}
+import User from "../entities/user.model";
+import {registration} from "../entities/user.interface"
 
 export default class userRepository {
   saveUser = async (userData: registration) => {

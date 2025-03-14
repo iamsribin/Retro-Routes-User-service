@@ -1,6 +1,8 @@
-import auth from "../middleware/auth";
+import {AuthService} from "../services/auth";
 import generateOTP from "../services/generateOtp";
 import { sendMail } from "../services/nodeMailer";
+
+const auth = new AuthService();
 
 export const sendOtp=async(email:string,name:string)=>{
     try {
@@ -13,6 +15,5 @@ export const sendOtp=async(email:string,name:string)=>{
         return token
     } catch (error) {
         console.log("sendOtp fun",error);
-        
     }
 }

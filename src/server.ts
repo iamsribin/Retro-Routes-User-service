@@ -5,11 +5,20 @@ import "dotenv/config";
 import connectDB from "./config/mongo";
 connectDB(); 
 
-import registrationControl from './controller/registrationController';
-import loginControl from './controller/loginController';
+import registrationControl from './controller/registration-controller';
+import loginControl from './controller/login-controller';
+import LoginUseCases from "./use-cases/login.use-cases";
+import RegistrationUseCases from "./use-cases/registration.use-cases";
+import { AuthService } from "./services/auth"
+import UserRepository from "./repositories/userRepo";
 
-const registrationController= new registrationControl() 
-const loginController= new loginControl() 
+const authService = new AuthService();
+const userRepo = new UserRepository()
+const registrationUseCases = new RegistrationUseCases(userRepo);
+const loginUseCases = new LoginUseCases(userRepo, authService);
+
+const registrationController = new registrationControl(authService, registrationUseCases);
+const loginController = new loginControl(loginUseCases);
 
 const packageDef = protoLoader.loadSync(path.resolve(__dirname, './proto/user.proto'), {
   keepCase: true,
@@ -22,7 +31,6 @@ const packageDef = protoLoader.loadSync(path.resolve(__dirname, './proto/user.pr
 const grpcObject = grpc.loadPackageDefinition(packageDef) as unknown as any;
 const userProto = grpcObject.user_package;
 
-
 if (!userProto || !userProto.User || !userProto.User.service) {
   console.error("Failed to load the User service from the proto file.");
   process.exit(1);
@@ -34,7 +42,7 @@ server.addService(userProto.User.service, {
   Register: registrationController.signup,
   CheckUser: registrationController.checkUser,
   // ResendOtp: registrationController.resendOtp,
-  // CheckGoogleLoginUser: loginController.checkGoogleLoginUser,
+  CheckGoogleLoginUser: loginController.checkGoogleLoginUser,
   CheckLoginUser: loginController.checkLoginUser,
 })
 
@@ -49,7 +57,6 @@ const grpcServer = () => {
       return;
     }
     console.log(`gRPC user server started on port:${bindPort}`);
-    // server.start();
   });
 };
 
