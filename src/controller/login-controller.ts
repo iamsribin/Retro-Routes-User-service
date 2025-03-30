@@ -10,7 +10,6 @@ export default class LoginController{
 
     checkLoginUser=async (call:any,callback:any)=>{
         const {mobile}=call.request
-        console.log(call.request);
         
         try {
             const response=await this.loginUseCase.checkLoginUser(mobile)

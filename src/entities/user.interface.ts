@@ -10,7 +10,8 @@ export interface UserInterface extends Document {
     userImage: string;
     referral_code: string;
     account_status: string;
-    joiningDate: string;
+    joiningDate: Date;
+    isAdmin:boolean,
     wallet: {
         balance: number;
         transactions: {

@@ -7,10 +7,13 @@ connectDB();
 
 import registrationControl from './controller/registration-controller';
 import loginControl from './controller/login-controller';
+import adminControl from './controller/admin-controller';
 import LoginUseCases from "./use-cases/login.use-cases";
 import RegistrationUseCases from "./use-cases/registration.use-cases";
 import { AuthService } from "./services/auth"
 import UserRepository from "./repositories/userRepo";
+
+const adminController = new adminControl()
 
 const authService = new AuthService();
 const userRepo = new UserRepository()
@@ -44,6 +47,8 @@ server.addService(userProto.User.service, {
   // ResendOtp: registrationController.resendOtp,
   CheckGoogleLoginUser: loginController.checkGoogleLoginUser,
   CheckLoginUser: loginController.checkLoginUser,
+  AdiminGetActiveUser: adminController.getActiveUser,
+  AdminGetBlockedUsers:adminController.getBlockedUsers
 })
 
 

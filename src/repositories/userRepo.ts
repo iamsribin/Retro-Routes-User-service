@@ -3,6 +3,9 @@ import {registration} from "../entities/user.interface"
 
 export default class userRepository {
   saveUser = async (userData: registration) => {
+
+    const existingUser = await User.findOne();
+      
     const newUser = new User({
       name: userData.name,
       email: userData.email,
@@ -11,6 +14,7 @@ export default class userRepository {
       referral_code: userData.referral_code,
       userImage: userData.userImage,
       joiningDate: Date.now(),
+      isAdmin: existingUser ? false: true
     });
     try {
       const saveUser = await newUser.save();
@@ -60,7 +64,9 @@ export default class userRepository {
   };
   findUserWithStatus = async (status: string) => {
     try {
-      const user = await User.find({ account_status: status });
+      const user = await User.find({ account_status: status, isAdmin:{$ne:true}});
+      console.log("repor",user);
+      
       return user;
     } catch (error) {
       console.log(error);

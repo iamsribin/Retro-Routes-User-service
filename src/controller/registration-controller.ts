@@ -23,7 +23,6 @@ export default class RegistrationController {
       userImage,
       token,
     } = call.request;
-    console.log("singup requst", call.request);
 
     const userData = {
       name,
@@ -38,7 +37,7 @@ export default class RegistrationController {
 
     try {
       const jwtOtp: any = this.auth.verifyOtpToken(token);
-      console.log("otp==", otp, " jwtotp==", jwtOtp?.clientId);
+
       if (otp === jwtOtp?.clientId) {
         const response = await this.registartionUseCase.user_registration(
           userData
@@ -63,8 +62,9 @@ export default class RegistrationController {
 
       if (response.message === "user not registered") {
         const token = await sendOtp(email, name);
-        console.log(token, "controll");
+
         callback(null, { token, message: response.message });
+        
       } else {
         callback(null, response);
       }

@@ -2,7 +2,6 @@ import { UserInterface } from "../entities/user.interface";
 import { AuthService } from "../services/auth";
 import UserRepository from "../repositories/userRepo";
 
-
 export default class LoginUseCase {
 
   private userRepo: UserRepository;
@@ -25,6 +24,7 @@ export default class LoginUseCase {
       token,
       _id: user._id,
       refreshToken,
+      isAdmin: user.isAdmin
     };
   }
   
