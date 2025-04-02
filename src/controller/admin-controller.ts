@@ -29,4 +29,18 @@ export default class AdminController{
         
       }
     }
+
+    getUserDetails=async(call: any, callBack:any)=>{
+      try {         
+        const {id} = call.request;
+        const userDetail = await adminUseCase.getUserDetails(id);
+        console.log("userDetail====",userDetail);
+        
+        callBack(null, userDetail);
+      } catch (error) {
+        console.log(error);
+        callBack(error,{error:(error as Error).message});
+        
+      }
+    }
 }

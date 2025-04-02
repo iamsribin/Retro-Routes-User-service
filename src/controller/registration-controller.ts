@@ -77,4 +77,17 @@ export default class RegistrationController {
       });
     }
   };
+
+  resendOtp=async(call: any, callback: any)=>{
+    try {
+        const {email,name}=call.request;
+        console.log("email",email);
+        const token=await sendOtp(email,name);
+        console.log(token,"new token");
+        callback(null,{token, message: "OTP resent successfully" });
+    } catch (error) {
+        console.log(error);
+        callback(null,{ message: "OTP resent errored" });
+    }
+  }
 }

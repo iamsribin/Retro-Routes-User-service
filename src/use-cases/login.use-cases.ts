@@ -18,6 +18,11 @@ export default class LoginUseCase {
     }
     const token = await this.auth.createToken(user._id.toString(), "15m");
     const refreshToken = await this.auth.createToken(user._id.toString(), "7d");
+    
+    if(!token || !refreshToken){
+      throw new Error("issue in token creation");
+    }
+
     return {
       message: "Success",
       name: user.name,

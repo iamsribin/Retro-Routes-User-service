@@ -44,11 +44,13 @@ const server = new grpc.Server();
 server.addService(userProto.User.service, {
   Register: registrationController.signup,
   CheckUser: registrationController.checkUser,
-  // ResendOtp: registrationController.resendOtp,
+  ResendOtp: registrationController.resendOtp,
   CheckGoogleLoginUser: loginController.checkGoogleLoginUser,
   CheckLoginUser: loginController.checkLoginUser,
+
   AdiminGetActiveUser: adminController.getActiveUser,
-  AdminGetBlockedUsers:adminController.getBlockedUsers
+  AdminGetBlockedUsers:adminController.getBlockedUsers,
+  AdminGetUserData:adminController.getUserDetails
 })
 
 
