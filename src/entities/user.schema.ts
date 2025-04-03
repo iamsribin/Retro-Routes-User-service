@@ -30,7 +30,11 @@ const UserSchema: Schema = new Schema<UserInterface>({
   },
   account_status: {
     type: String,
+    enum: ["Good", "Block"],
     default: "Good",
+  },
+  reasone:{
+  type: String,
   },
   isAdmin: { type: Boolean, default: false },
   wallet: {

@@ -18,7 +18,7 @@ export default class AdminController{
 
     getBlockedUsers= async(call:any, callBack:any)=>{
       try {
-        const Users = await adminUseCase.getUserData("Blocked");
+        const Users = await adminUseCase.getUserData("Block");
         console.log("blocked users",Users);
 
         callBack(null,{Users})
@@ -40,6 +40,18 @@ export default class AdminController{
       } catch (error) {
         console.log(error);
         callBack(error,{error:(error as Error).message});
+        
+      }
+    }
+
+    updateUderStatus = async(call:any, callBack:any)=>{
+      try {
+        console.log(call.request);
+        const{reason,status,id}= call.request;
+       const response = await adminUseCase.updateUserStatus(id, status, reason);
+        callBack(null, response)
+      } catch (error) {
+        console.log(error);
         
       }
     }

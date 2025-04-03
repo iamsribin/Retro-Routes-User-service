@@ -50,7 +50,8 @@ server.addService(userProto.User.service, {
 
   AdiminGetActiveUser: adminController.getActiveUser,
   AdminGetBlockedUsers:adminController.getBlockedUsers,
-  AdminGetUserData:adminController.getUserDetails
+  AdminGetUserData:adminController.getUserDetails,
+  AdminUpdateUserStatus: adminController.updateUderStatus,
 })
 
 

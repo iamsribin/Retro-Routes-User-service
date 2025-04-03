@@ -12,6 +12,7 @@ export interface UserInterface extends Document {
     account_status: string;
     joiningDate: Date;
     isAdmin:boolean,
+    reasone: string,
     wallet: {
         balance: number;
         transactions: {

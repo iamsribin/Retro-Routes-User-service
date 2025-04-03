@@ -110,4 +110,22 @@ export default class userRepository {
       
     }
   }
+
+  updateUserStatus = async(id: string, status: string, reasone:string) =>{
+    try {
+
+      const response = await User.findByIdAndUpdate(id,{
+        reasone: reasone,
+        account_status:status
+    },
+     {new: true}
+   )
+
+   console.log("reponse of update",response);
+   return response
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 }
