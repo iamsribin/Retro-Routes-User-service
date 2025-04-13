@@ -16,26 +16,37 @@ export default class LoginUseCase {
     if (user.account_status === "Blocked") {
       return { message: "Blocked" };
     }
-    const token = await this.auth.createToken(user._id.toString(), "15m");
-    const refreshToken = await this.auth.createToken(user._id.toString(), "7d");
-    
-    if(!token || !refreshToken){
-      throw new Error("issue in token creation");
+    const role = user.isAdmin ? "Admin" : "User"; 
+    const token = await this.auth.createToken(user._id.toString(), "15m", role);
+    const refreshToken = await this.auth.createToken(user._id.toString(), "7d", role);
+  
+    if (!token || !refreshToken) {
+      throw new Error("Issue in token creation");
     }
-
+  console.log("return data",{
+    message: "Success",
+    name: user.name,
+    token,
+    _id: user._id,
+    refreshToken,
+    role, 
+  });
+  
     return {
       message: "Success",
       name: user.name,
       token,
       _id: user._id,
       refreshToken,
-      isAdmin: user.isAdmin
+      role, 
     };
   }
   
   checkLoginUser = async (mobile: number) => {
     try {
       const user = (await this.userRepo.findUser(mobile)) as UserInterface;
+      console.log("user",user);
+      
       return user ? this.handleLogin(user) : { message: "No user found" };
     } catch (error) {
       throw new Error((error as Error).message);

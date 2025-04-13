@@ -14,8 +14,10 @@ export class AuthService {
     }
   }
 
-  createToken = async (clientId: ObjectId | string, expire: string): Promise<string> => {
-    return jwt.sign({ clientId }, this.jwtSecretKey, { expiresIn: expire as SignOptions["expiresIn"],});
+  createToken = async (clientId: ObjectId | string, expire: string, role: string): Promise<string> => {
+    return jwt.sign({ clientId, role }, this.jwtSecretKey, {
+      expiresIn: expire as SignOptions["expiresIn"],
+    });
   };
 
   verifyOtpToken = (token: string): JwtPayload | { message: string } => {
