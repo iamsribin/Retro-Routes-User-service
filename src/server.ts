@@ -10,16 +10,17 @@ import loginControl from './controller/login-controller';
 import adminControl from './controller/admin-controller';
 import LoginUseCases from "./use-cases/login.use-cases";
 import RegistrationUseCases from "./use-cases/registration.use-cases";
+import AdminUseCases from "./use-cases/admin.use-cases";
 import { AuthService } from "./services/auth"
 import UserRepository from "./repositories/userRepo";
 
-const adminController = new adminControl()
-
 const authService = new AuthService();
-const userRepo = new UserRepository()
+const userRepo = new UserRepository();
+const adminUseCases = new AdminUseCases(userRepo);
 const registrationUseCases = new RegistrationUseCases(userRepo);
 const loginUseCases = new LoginUseCases(userRepo, authService);
 
+const adminController = new adminControl(adminUseCases);
 const registrationController = new registrationControl(authService, registrationUseCases);
 const loginController = new loginControl(loginUseCases);
 

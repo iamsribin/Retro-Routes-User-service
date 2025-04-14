@@ -1,11 +1,15 @@
-import userRepository from "../repositories/userRepo";
-
-const userRepo = new userRepository();
+import UserRepository from "../repositories/userRepo";
 
 export default class AdminUseCase {
+  private userRepo: UserRepository;
+
+  constructor(userRepo: UserRepository) {
+    this.userRepo = userRepo;
+  }
+
   getUserData = async (status: string) => {
     try {
-      const response = await userRepo.findUserWithStatus(status);
+      const response = await this.userRepo.findUserWithStatus(status);
 
       return response;
     } catch (error) {
@@ -17,7 +21,7 @@ export default class AdminUseCase {
 
   getUserDetails = async (id: string) => {
     try {
-      const response = await userRepo.getUserDetails(id);
+      const response = await  this.userRepo.getUserDetails(id);
       const userDetail = {
         name: response?.name,
         email: response?.email,
@@ -40,7 +44,7 @@ export default class AdminUseCase {
 
   updateUserStatus = async (id: string, status: string, reasone: string) => {
     try {
-      const response = await userRepo.updateUserStatus(id, status, reasone);
+      const response = await  this.userRepo.updateUserStatus(id, status, reasone);
       console.log("reponse of update", response);
       return response;
     } catch (error) {

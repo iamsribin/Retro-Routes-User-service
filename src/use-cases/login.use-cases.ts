@@ -13,7 +13,7 @@ export default class LoginUseCase {
   }
 
   private async handleLogin(user: UserInterface) {
-    if (user.account_status === "Blocked") {
+    if (user.account_status === "Block") {
       return { message: "Blocked" };
     }
     const role = user.isAdmin ? "Admin" : "User"; 
