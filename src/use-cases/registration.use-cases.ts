@@ -1,9 +1,9 @@
 import UserRepository from "../repositories/userRepo";
-import bcrypt from "../services/bcrypt";
+import bcrypt from "../utilities/bcrypt";
 import { refferalCode } from "../utilities/refferalCodeGenarate";
 import { userData } from "../entities/user.interface";
 
-export default class RegistartionUseCase {
+export default class RegistrationUseCases {
 
   private userRepo: UserRepository;
   constructor(userRepo: UserRepository) {
@@ -44,6 +44,8 @@ export default class RegistartionUseCase {
         return { message: "user not registered" };
       }
     } catch (error: unknown) {
+      console.log("=================",error);
+      
       return { message: (error as Error).message };
     }
   };

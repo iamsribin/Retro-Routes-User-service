@@ -5,13 +5,13 @@ import "dotenv/config";
 import connectDB from "./config/mongo";
 connectDB(); 
 
-import registrationControl from './controller/registration-controller';
-import loginControl from './controller/login-controller';
-import adminControl from './controller/admin-controller';
+import registrationControl from './controller/implementation/registration-controller';
+import loginControl from './controller/implementation/login-controller';
+import adminControl from './controller/implementation/admin-controller';
 import LoginUseCases from "./use-cases/login.use-cases";
 import RegistrationUseCases from "./use-cases/registration.use-cases";
 import AdminUseCases from "./use-cases/admin.use-cases";
-import { AuthService } from "./services/auth"
+import { AuthService } from "./utilities/auth"
 import UserRepository from "./repositories/userRepo";
 
 const authService = new AuthService();
@@ -21,7 +21,7 @@ const registrationUseCases = new RegistrationUseCases(userRepo);
 const loginUseCases = new LoginUseCases(userRepo, authService);
 
 const adminController = new adminControl(adminUseCases);
-const registrationController = new registrationControl(authService, registrationUseCases);
+const registrationController = new registrationControl(authService, registrationUseCases); 
 const loginController = new loginControl(loginUseCases);
 
 const packageDef = protoLoader.loadSync(path.resolve(__dirname, './proto/user.proto'), {
@@ -43,18 +43,17 @@ if (!userProto || !userProto.User || !userProto.User.service) {
 const server = new grpc.Server();
 
 server.addService(userProto.User.service, {
-  Register: registrationController.signup,
-  CheckUser: registrationController.checkUser,
-  ResendOtp: registrationController.resendOtp,
-  CheckGoogleLoginUser: loginController.checkGoogleLoginUser,
-  CheckLoginUser: loginController.checkLoginUser,
+  Register: registrationController.signup.bind(registrationController),
+  CheckUser: registrationController.checkUser.bind(registrationController),
+  ResendOtp: registrationController.resendOtp.bind(registrationController),
+  CheckGoogleLoginUser: loginController.checkGoogleLoginUser.bind(loginController),
+  CheckLoginUser: loginController.checkLoginUser.bind(loginController),
 
-  AdiminGetActiveUser: adminController.getActiveUser,
-  AdminGetBlockedUsers:adminController.getBlockedUsers,
-  AdminGetUserData:adminController.getUserDetails,
-  AdminUpdateUserStatus: adminController.updateUderStatus,
-})
-
+  AdminGetActiveUser: adminController.getActiveUser.bind(adminController),
+  AdminGetBlockedUsers: adminController.getBlockedUsers.bind(adminController),
+  AdminGetUserData: adminController.getUserDetails.bind(adminController),
+  AdminUpdateUserStatus: adminController.updateUserStatus.bind(adminController),
+});
 
 const grpcServer = () => {
   const port = process.env.PORT || '3002';

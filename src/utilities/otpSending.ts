@@ -1,6 +1,6 @@
-import {AuthService} from "../services/auth";
-import generateOTP from "../services/generateOtp";
-import { sendMail } from "../services/nodeMailer";
+import {AuthService} from "./auth";
+import generateOTP from "./generateOtp";
+import { sendMail } from "./nodeMailer";
 
 const auth = new AuthService();
 

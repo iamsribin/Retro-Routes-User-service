@@ -51,7 +51,6 @@ export interface ridePayment {
   rideId: string;
 }
 
-
 export interface userData {
   name: string;
   email: string;

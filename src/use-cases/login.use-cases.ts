@@ -1,5 +1,5 @@
 import { UserInterface } from "../entities/user.interface";
-import { AuthService } from "../services/auth";
+import { AuthService } from "../utilities/auth";
 import UserRepository from "../repositories/userRepo";
 
 export default class LoginUseCase {
@@ -45,7 +45,7 @@ export default class LoginUseCase {
   checkLoginUser = async (mobile: number) => {
     try {
       const user = (await this.userRepo.findUser(mobile)) as UserInterface;
-      console.log("user",user);
+      console.log("checkLoginUser",user);
       
       return user ? this.handleLogin(user) : { message: "No user found" };
     } catch (error) {
@@ -56,6 +56,7 @@ export default class LoginUseCase {
   checkGoogleUser = async (email: string) => {
     try {
       const user = (await this.userRepo.findEmail(email)) as UserInterface;
+
       return user ? this.handleLogin(user) : { message: "No user found" };
     } catch (error) {
       throw new Error((error as Error).message);
