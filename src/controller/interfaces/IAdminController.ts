@@ -1,6 +1,6 @@
 export interface AuthResponse {
     message: string;
-    data?: any; // response structure
+    Users?: any; // response structure
   }
   
   export type ControllerCallback<T = AuthResponse> = (error: Error | null, response?: T) => void;

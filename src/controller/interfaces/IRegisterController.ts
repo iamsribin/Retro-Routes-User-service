@@ -1,39 +1,26 @@
+import { UserData } from "../../dto/registrationServiceDTO";
+
+export interface ControllerResponse {
+  message: string;
+  token?: string;
+  data?: any;
+}
+
+export type ControllerCallback<T = ControllerResponse> = (error: Error | null, response?: T) => void;
+
 export interface IRegistrationController {
   signup(
-    call: {
-      request: {
-        name: string;
-        email: string;
-        mobile: number;
-        password: string;
-        reffered_Code: string;
-        otp: string;
-        userImage: string;
-        token: string;
-      };
-    },
-    callback: (error: Error | null, response?: { message: string }) => void
+    call: { request: UserData & { otp: string; token: string } },
+    callback: ControllerCallback
   ): Promise<void>;
 
   checkUser(
-    call: {
-      request: {
-        mobile: number;
-        email: string;
-        name: string;
-      };
-    },
-    callback: (error: Error | null, response?: { token?: string; message: string }) => void
+    call: { request: { mobile: number; email: string; name: string } },
+    callback: ControllerCallback
   ): Promise<void>;
-  
+
   resendOtp(
-    call: {
-      request: {
-        email: string;
-        name: string;
-      };
-    },
-    callback: (error: Error | null, response?: { token?: string; message: string }) => void
+    call: { request: { email: string; name: string } },
+    callback: ControllerCallback
   ): Promise<void>;
-  
 }

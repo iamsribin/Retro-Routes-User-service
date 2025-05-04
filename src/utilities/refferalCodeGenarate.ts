@@ -1,4 +1,4 @@
-export const refferalCode=()=>{
+export const generateReferralCode=()=>{
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const digits = "0123456789";
     let randomString = "";

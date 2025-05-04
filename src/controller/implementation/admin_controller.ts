@@ -1,10 +1,10 @@
-import  AdminUseCase  from '../../use-cases/admin.use-cases';
+import  AdminService  from '../../services/implementation/admin_service';
 import { handleControllerError } from '../../utilities/handleError';
-import { IAdminController, AuthResponse, ControllerCallback } from '../interfaces/IAdminController';
+import { IAdminController, ControllerCallback } from '../interfaces/IAdminController';
 
 export class AdminController implements IAdminController {
   constructor(
-    private readonly adminUseCase: AdminUseCase
+    private readonly AdminService: AdminService
   ) {}
 
   /**
@@ -17,8 +17,9 @@ export class AdminController implements IAdminController {
     callback: ControllerCallback
   ): Promise<void> {
     try {
-      const response = await this.adminUseCase.getUserData('Good');
-      callback(null, { message: 'Active users retrieved successfully', data: response });
+      const response = await this.AdminService.getUserWithStatus('Good');
+      const users=response.data
+      callback(null, { message: 'Active users retrieved successfully', Users: users });
     } catch (error) {
       callback(handleControllerError(error, 'Active user retrieval'));
     }
@@ -34,8 +35,10 @@ export class AdminController implements IAdminController {
     callback: ControllerCallback
   ): Promise<void> {
     try {
-      const response = await this.adminUseCase.getUserData('Block');
-      callback(null, { message: 'Blocked users retrieved successfully', data: response });
+      const response = await this.AdminService.getUserWithStatus('Block');
+      console.log("====",response);
+      const user = response.data
+      callback(null, { message: 'Blocked users retrieved successfully', Users: user });
     } catch (error) {
       callback(handleControllerError(error, 'Blocked user retrieval'));
     }
@@ -52,8 +55,8 @@ export class AdminController implements IAdminController {
   ): Promise<void> {
     try {
       const { id } = call.request;
-      const response = await this.adminUseCase.getUserDetails(id);
-      callback(null, { message: 'User details retrieved successfully', data: response });
+      const response = await this.AdminService.getUserDetails(id);
+      callback(null, { message: 'User details retrieved successfully', Users: response });
     } catch (error) {
       callback(handleControllerError(error, 'User details retrieval'));
     }
@@ -70,8 +73,8 @@ export class AdminController implements IAdminController {
   ): Promise<void> {
     try {
       const { id, status, reason } = call.request;
-      const response = await this.adminUseCase.updateUserStatus(id, status, reason);
-      callback(null, { message: 'User status updated successfully', data: response });
+      const response = await this.AdminService.updateUserStatus(id, status, reason);
+      callback(null, { message: 'User status updated successfully', Users: response });
     } catch (error) {
       callback(handleControllerError(error, 'User status update'));
     }

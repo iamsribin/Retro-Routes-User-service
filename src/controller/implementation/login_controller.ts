@@ -1,10 +1,10 @@
-import LoginUseCases  from '../../use-cases/login.use-cases';
+import LoginService  from '../../services/implementation/login_service';
 import { handleControllerError } from '../../utilities/handleError';
 import { ILoginController, ControllerCallback } from '../interfaces/ILoginController';
 
 export default class LoginController implements ILoginController {
   constructor(
-    private readonly loginUseCase: LoginUseCases
+    private readonly loginService: LoginService
   ) {}
 
   /**
@@ -18,8 +18,9 @@ export default class LoginController implements ILoginController {
   ): Promise<void> {
     try {
       const { mobile } = call.request;
-      const response = await this.loginUseCase.checkLoginUser(mobile);
-      callback(null, response);
+      const response = await this.loginService.checkLoginUser(mobile);
+      
+      callback(null,{message:response.message, ...response?.data});
     } catch (error) {
       callback(handleControllerError(error, 'User authentication'));
     }
@@ -36,8 +37,8 @@ export default class LoginController implements ILoginController {
   ): Promise<void> {
     try {
       const { email } = call.request;
-      const response = await this.loginUseCase.checkGoogleUser(email);
-      callback(null, response);
+      const response = await this.loginService.checkGoogleUser(email);
+      callback(null,{message:response.message, ...response?.data});
     } catch (error) {
       callback(handleControllerError(error, 'Google authentication'));
     }

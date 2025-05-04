@@ -5,14 +5,14 @@ import "dotenv/config";
 import connectDB from "./config/mongo";
 connectDB(); 
 
-import registrationControl from './controller/implementation/registration-controller';
-import loginControl from './controller/implementation/login-controller';
-import adminControl from './controller/implementation/admin-controller';
-import LoginUseCases from "./use-cases/login.use-cases";
-import RegistrationUseCases from "./use-cases/registration.use-cases";
-import AdminUseCases from "./use-cases/admin.use-cases";
+import registrationControl from './controller/implementation/registration_controller';
+import loginControl from './controller/implementation/login_controller';
+import adminControl from './controller/implementation/admin_controller';
+import LoginUseCases from "./services/implementation/login_service";
+import RegistrationUseCases from "./services/implementation/registration_service";
+import AdminUseCases from "./services/implementation/admin_service";
 import { AuthService } from "./utilities/auth"
-import UserRepository from "./repositories/userRepo";
+import UserRepository from "./repositories/implementation/userRepo";
 
 const authService = new AuthService();
 const userRepo = new UserRepository();
