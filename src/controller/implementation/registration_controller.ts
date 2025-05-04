@@ -1,11 +1,11 @@
-import { IRegistrationController, ControllerCallback } from '../interfaces/IRegisterController';
-import  RegistrationService  from '../../services/implementation/registration_service';
+import { IRegistrationController, ControllerCallback, RegisterResponse, CheckUserResponse, ResendOtpResponse } from '../interfaces/IRegisterController';
+import RegistrationService from '../../services/implementation/registration_service';
 import { AuthService } from '../../utilities/auth';
 import { sendOtp } from '../../utilities/otpSending';
 import { JwtPayload } from 'jsonwebtoken';
 import { UserData } from "../../dto/registrationServiceDTO";
 import { validateInput } from '../../utilities/validations/registrationValidation';
-import {handleControllerError} from "../../utilities/handleError";
+import { handleControllerError } from "../../utilities/handleError";
 
 interface OtpPayload extends JwtPayload {
   clientId: string;
@@ -24,7 +24,7 @@ export default class RegistrationController implements IRegistrationController {
    */
   async signup(
     call: { request: UserData & { otp: string; token: string } },
-    callback: ControllerCallback
+    callback: ControllerCallback<RegisterResponse>
   ): Promise<void> {
     try {
       const { name, email, mobile, password, reffered_Code, otp, userImage, token } = call.request;
@@ -33,7 +33,7 @@ export default class RegistrationController implements IRegistrationController {
       const jwtOtp = this.authService.verifyOtpToken(token) as OtpPayload;
 
       if (otp !== jwtOtp?.clientId) {
-        callback(new Error('Invalid OTP' ))
+        callback(new Error('Invalid OTP'));
         return;
       }
 
@@ -46,7 +46,7 @@ export default class RegistrationController implements IRegistrationController {
         userImage,
       });
 
-      callback(null, { message: 'User registered successfully', data: response });
+      callback(null, { message: response.message });
     } catch (error) {
       callback(handleControllerError(error, 'User registration'));
     }
@@ -59,7 +59,7 @@ export default class RegistrationController implements IRegistrationController {
    */
   async checkUser(
     call: { request: { mobile: number; email: string; name: string } },
-    callback: ControllerCallback
+    callback: ControllerCallback<CheckUserResponse>
   ): Promise<void> {
     try {
       const { mobile, email, name } = call.request;
@@ -69,11 +69,15 @@ export default class RegistrationController implements IRegistrationController {
 
       if (response.message === 'User not registered') {
         const token = await sendOtp(email, name);
+        if (!token) {
+          callback(new Error('Failed to generate OTP token'));
+          return;
+        }
         callback(null, { message: response.message, token });
         return;
       }
 
-      callback(null, response);
+      callback(null, { message: response.message, token: '' });
     } catch (error) {
       callback(handleControllerError(error, 'User check'));
     }
@@ -86,7 +90,7 @@ export default class RegistrationController implements IRegistrationController {
    */
   async resendOtp(
     call: { request: { email: string; name: string } },
-    callback: ControllerCallback
+    callback: ControllerCallback<ResendOtpResponse>
   ): Promise<void> {
     try {
       const { email, name } = call.request;      
@@ -94,7 +98,7 @@ export default class RegistrationController implements IRegistrationController {
 
       const token = await sendOtp(email, name);
       if (!token) {
-        callback(new Error('Failed to generate OTP token'))
+        callback(new Error('Failed to generate OTP token'));
         return;
       }
 
@@ -104,4 +108,3 @@ export default class RegistrationController implements IRegistrationController {
     }
   }
 }
-

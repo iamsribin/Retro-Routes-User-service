@@ -1,26 +1,37 @@
 import { UserData } from "../../dto/registrationServiceDTO";
 
-export interface ControllerResponse {
+export interface RegisterResponse {
   message: string;
-  token?: string;
-  data?: any;
 }
 
-export type ControllerCallback<T = ControllerResponse> = (error: Error | null, response?: T) => void;
+export interface CheckUserResponse {
+  message: string;
+  token: string;
+}
+
+export interface ResendOtpResponse {
+  message: string;
+  token: string;
+}
+
+export type ControllerCallback<T = RegisterResponse | CheckUserResponse | ResendOtpResponse> = (
+  error: Error | null,
+  response?: T
+) => void;
 
 export interface IRegistrationController {
   signup(
     call: { request: UserData & { otp: string; token: string } },
-    callback: ControllerCallback
+    callback: ControllerCallback<RegisterResponse>
   ): Promise<void>;
 
   checkUser(
     call: { request: { mobile: number; email: string; name: string } },
-    callback: ControllerCallback
+    callback: ControllerCallback<CheckUserResponse>
   ): Promise<void>;
 
   resendOtp(
     call: { request: { email: string; name: string } },
-    callback: ControllerCallback
+    callback: ControllerCallback<ResendOtpResponse>
   ): Promise<void>;
 }
