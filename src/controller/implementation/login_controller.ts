@@ -1,6 +1,6 @@
-import LoginService  from '../../services/implementation/login_service';
+import LoginService from '../../services/implementation/login_service';
 import { handleControllerError } from '../../utilities/handleError';
-import { ILoginController, ControllerCallback } from '../interfaces/ILoginController';
+import { ILoginController, ControllerCallback, CheckLoginUserResponse, CheckGoogleLoginUserResponse } from '../interfaces/ILoginController';
 
 export default class LoginController implements ILoginController {
   constructor(
@@ -14,13 +14,22 @@ export default class LoginController implements ILoginController {
    */
   async checkLoginUser(
     call: { request: { mobile: number } },
-    callback: ControllerCallback
+    callback: ControllerCallback<CheckLoginUserResponse>
   ): Promise<void> {
     try {
       const { mobile } = call.request;
       const response = await this.loginService.checkLoginUser(mobile);
       
-      callback(null,{message:response.message, ...response?.data});
+      const result: CheckLoginUserResponse = {
+        message: response.message,
+        name: response.data?.name || '',
+        token: response.data?.token || '',
+        refreshToken: response.data?.refreshToken || '',
+        _id: response.data?._id || '',
+        role: response.data?.role || ''
+      };
+      
+      callback(null, result);
     } catch (error) {
       callback(handleControllerError(error, 'User authentication'));
     }
@@ -33,12 +42,22 @@ export default class LoginController implements ILoginController {
    */
   async checkGoogleLoginUser(
     call: { request: { email: string } },
-    callback: ControllerCallback
+    callback: ControllerCallback<CheckGoogleLoginUserResponse>
   ): Promise<void> {
     try {
       const { email } = call.request;
       const response = await this.loginService.checkGoogleUser(email);
-      callback(null,{message:response.message, ...response?.data});
+      
+      const result: CheckGoogleLoginUserResponse = {
+        message: response.message,
+        name: response.data?.name || '',
+        token: response.data?.token || '',
+        refreshToken: response.data?.refreshToken || '',
+        _id: response.data?._id || '',
+        role: response.data?.role || ''
+      };
+      
+      callback(null, result);
     } catch (error) {
       callback(handleControllerError(error, 'Google authentication'));
     }
