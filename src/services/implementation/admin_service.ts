@@ -44,7 +44,7 @@ export default class AdminService implements IAdminService {
         throw new Error('User not found');
       }
 
-      const userDetail = {
+      const data = {
         name: user.name,
         email: user.email,
         mobile: user.mobile,
@@ -59,7 +59,7 @@ export default class AdminService implements IAdminService {
         reason: user.reasone,
       };
 
-      return { message: 'User details retrieved successfully', data: userDetail };
+      return { message: 'User details retrieved successfully', data };
     } catch (error) {
       throw handleControllerError(error, 'User details retrieval');
     }

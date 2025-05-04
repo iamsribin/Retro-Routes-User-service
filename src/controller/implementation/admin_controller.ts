@@ -1,6 +1,6 @@
-import  AdminService  from '../../services/implementation/admin_service';
+import AdminService from '../../services/implementation/admin_service';
 import { handleControllerError } from '../../utilities/handleError';
-import { IAdminController, ControllerCallback } from '../interfaces/IAdminController';
+import { IAdminController, ControllerCallback, AdminGetUserDataResponse, AdminUpdateUserStatusResponse, AdminGetDataResponse } from '../interfaces/IAdminController';
 
 export class AdminController implements IAdminController {
   constructor(
@@ -14,12 +14,12 @@ export class AdminController implements IAdminController {
    */
   async getActiveUser(
     call: { request: {} },
-    callback: ControllerCallback
+    callback: ControllerCallback<AdminGetDataResponse>
   ): Promise<void> {
     try {
       const response = await this.AdminService.getUserWithStatus('Good');
-      const users=response.data
-      callback(null, { message: 'Active users retrieved successfully', Users: users });
+      const users = response.data;
+      callback(null, { Users: users });
     } catch (error) {
       callback(handleControllerError(error, 'Active user retrieval'));
     }
@@ -32,13 +32,12 @@ export class AdminController implements IAdminController {
    */
   async getBlockedUsers(
     call: { request: {} },
-    callback: ControllerCallback
+    callback: ControllerCallback<AdminGetDataResponse>
   ): Promise<void> {
     try {
       const response = await this.AdminService.getUserWithStatus('Block');
-      console.log("====",response);
-      const user = response.data
-      callback(null, { message: 'Blocked users retrieved successfully', Users: user });
+      const users = response.data;
+      callback(null, { Users: users });
     } catch (error) {
       callback(handleControllerError(error, 'Blocked user retrieval'));
     }
@@ -51,12 +50,29 @@ export class AdminController implements IAdminController {
    */
   async getUserDetails(
     call: { request: { id: string } },
-    callback: ControllerCallback
+    callback: ControllerCallback<AdminGetUserDataResponse>
   ): Promise<void> {
     try {
       const { id } = call.request;
       const response = await this.AdminService.getUserDetails(id);
-      callback(null, { message: 'User details retrieved successfully', Users: response });
+      
+      const userData: AdminGetUserDataResponse = {
+        _id: id,
+        name: response.data.name,
+        email: response.data.email,
+        mobile: response.data.mobile.toString(),
+        userImage: response.data.userImage,
+        referral_code: response.data.referral_code,
+        account_status: response.data.account_status,
+        balance: response.data.balance,
+        total_transactions: response.data.total_transactions,
+        completed_rides: response.data.completed_rides,
+        cancelled_rides: response.data.cancelled_rides,
+        joiningDate: response.data.joiningDate,
+        reason: response.data.reason
+      };
+  
+      callback(null, userData);
     } catch (error) {
       callback(handleControllerError(error, 'User details retrieval'));
     }
@@ -69,12 +85,12 @@ export class AdminController implements IAdminController {
    */
   async updateUserStatus(
     call: { request: { id: string; status: 'Good' | 'Block'; reason: string } },
-    callback: ControllerCallback
+    callback: ControllerCallback<AdminUpdateUserStatusResponse>
   ): Promise<void> {
     try {
       const { id, status, reason } = call.request;
       const response = await this.AdminService.updateUserStatus(id, status, reason);
-      callback(null, { message: 'User status updated successfully', Users: response });
+      callback(null, { message: response.message });
     } catch (error) {
       callback(handleControllerError(error, 'User status update'));
     }
