@@ -103,7 +103,7 @@ export default class RegistrationController implements IRegistrationController {
       }
 
       callback(null, { message: 'OTP resent successfully', token });
-    } catch (error) {
+    } catch (error:unknown) {
       callback(handleControllerError(error, 'OTP resend'));
     }
   }

@@ -90,7 +90,9 @@ export class AdminController implements IAdminController {
     try {
       const { id, status, reason } = call.request;
       const response = await this.AdminService.updateUserStatus(id, status, reason);
-      callback(null, { message: response.message });
+      console.log("updateUserStatus response",response,id);
+      
+      callback(null, { message: response.message, user_id: id });
     } catch (error) {
       callback(handleControllerError(error, 'User status update'));
     }

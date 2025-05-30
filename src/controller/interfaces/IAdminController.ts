@@ -16,6 +16,7 @@ export interface AdminGetUserDataResponse {
 
 export interface AdminUpdateUserStatusResponse {
   message: string;
+  user_id:string;
 }
 
 export interface AdminGetDataResponse {
