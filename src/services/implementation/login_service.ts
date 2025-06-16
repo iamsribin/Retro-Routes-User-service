@@ -29,7 +29,7 @@ export default class LoginService implements ILoginService {
     if (!token || !refreshToken) {
       throw new Error('Issue in token creation');
     }
-
+    
     return {
       message: 'Success',
       data: {
@@ -38,6 +38,8 @@ export default class LoginService implements ILoginService {
         _id: user._id.toString(),
         refreshToken,
         role,
+        mobile:user.mobile,
+        profile: user.userImage
       },
     };
   }

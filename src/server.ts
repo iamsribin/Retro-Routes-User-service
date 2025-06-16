@@ -7,8 +7,10 @@ connectDB();
 
 import registrationControl from './controller/implementation/registration_controller';
 import loginControl from './controller/implementation/login_controller';
+// import UserControl from './controller/implementation/user_controller';
 import adminControl from './controller/implementation/admin_controller';
 import LoginUseCases from "./services/implementation/login_service";
+// import UserService from "./services/implementation/user_service";
 import RegistrationUseCases from "./services/implementation/registration_service";
 import AdminUseCases from "./services/implementation/admin_service";
 import { AuthService } from "./utilities/auth"
@@ -18,11 +20,13 @@ const authService = new AuthService();
 const userRepo = new UserRepository();
 const adminUseCases = new AdminUseCases(userRepo);
 const registrationUseCases = new RegistrationUseCases(userRepo);
+// const userService = new UserService(userRepo);
 const loginUseCases = new LoginUseCases(userRepo, authService);
 
 const adminController = new adminControl(adminUseCases);
 const registrationController = new registrationControl(authService, registrationUseCases); 
 const loginController = new loginControl(loginUseCases);
+// const userController = new UserControl(userService);
 
 const packageDef = protoLoader.loadSync(path.resolve(__dirname, './proto/user.proto'), {
   keepCase: true,
@@ -48,6 +52,7 @@ server.addService(userProto.User.service, {
   ResendOtp: registrationController.resendOtp.bind(registrationController),
   CheckGoogleLoginUser: loginController.checkGoogleLoginUser.bind(loginController),
   CheckLoginUser: loginController.checkLoginUser.bind(loginController),
+  // fetchUserProfile: userController.fetchUserProfile.bind(userController),
 
   AdminGetActiveUser: adminController.getActiveUser.bind(adminController),
   AdminGetBlockedUsers: adminController.getBlockedUsers.bind(adminController),

@@ -4,7 +4,6 @@ import { handleControllerError } from '../../utilities/handleError';
 import { validateInput } from '../../utilities/validations/adminServiceValidation';
 import { IAdminService } from '../interfaces/IAdminService';
 
-
 export default class AdminService implements IAdminService {
   constructor(
     private readonly userRepo: UserRepository

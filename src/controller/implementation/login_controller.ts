@@ -26,7 +26,8 @@ export default class LoginController implements ILoginController {
         token: response.data?.token || '',
         refreshToken: response.data?.refreshToken || '',
         _id: response.data?._id || '',
-        role: response.data?.role || ''
+        role: response.data?.role || '',
+        mobile: response.data?.mobile
       };
       
       callback(null, result);

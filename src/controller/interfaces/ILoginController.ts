@@ -5,6 +5,7 @@ export interface CheckLoginUserResponse {
   refreshToken: string;
   _id: string;
   role: string;
+  mobile: number
 }
 
 export interface CheckGoogleLoginUserResponse {
